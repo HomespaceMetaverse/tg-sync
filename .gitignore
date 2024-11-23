@@ -25,3 +25,5 @@ yarn-error.log*
 swagger.json
 certs
 error.log
+
+bun.lockb

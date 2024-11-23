@@ -6,19 +6,34 @@ import { ObjectId } from 'mongoose';
 import { getTgPostById } from '../../src/posts/post-service';
 import { listenNewPost } from '../../routes/websocket';
 
+
+async function checkRedisConnection(queue: Queue.Queue<any>) {
+  try {
+    await queue.isReady();
+    console.log(`Successfully connected to Redis for queue: ${queue.name}`);
+  } catch (error) {
+    Logger.Instance.error(`Failed to connect to Redis for queue: ${queue.name}`, (<Error>error).message);
+    process.exit(1); 
+  }
+}
+
 export const tgChannelMessageQueue = new Queue<Message>('message processing', {
   redis: {
-    host: '127.0.0.1',
+    host: 'redis',
+    port: 6379,
+  },
+})
+
+export const tgSendPostToListener = new Queue<ObjectId>('send new post to listener', {
+  redis: {
+    host: 'redis',
     port: 6379,
   },
 });
 
-export const tgSendPostToListener = new Queue<ObjectId>('send new post to listener', {
-  redis: {
-    host: '127.0.0.1',
-    port: 6379,
-  },
-});
+// Проверка подключения к Redis для каждой очереди
+checkRedisConnection(tgChannelMessageQueue);
+checkRedisConnection(tgSendPostToListener);
 
 /**
  * tgChannelMessageQueue

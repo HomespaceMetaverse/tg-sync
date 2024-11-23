@@ -4,6 +4,7 @@ import { Logger } from '../../middleware';
 
 const { TELEGRAM_BOT_TOKEN: botToken, TELEGRAM_CHAT_ID: chatId } = process.env;
 
+
 if (!botToken || !chatId) {
   Logger.Instance.error('Telegram bot token or Telegram chat id in .env not set');
   throw new Error('Telegram bot token or Telegram chat id in .env not set');

@@ -1,10 +1,6 @@
 import { config } from 'dotenv';
 
-if (process.env.NODE_ENV === 'development') {
-  config({ path: '.env.local' });
-} else {
-  config({ path: `.env` });
-}
+config({ path: '.env.local' });
 
 import { Express } from 'express';
 import server from './server';
