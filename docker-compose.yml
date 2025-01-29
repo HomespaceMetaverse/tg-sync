@@ -22,6 +22,8 @@ services:
     depends_on:
       - mongo
       - redis
+    networks:
+      - app_network
 
   mongo:
     image: mongo:6
@@ -33,12 +35,20 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
     volumes:
       - mongo_data:/data/db
+    networks:
+      - app_network
 
   redis:
     image: redis:7
     container_name: redis
     ports:
       - '6380:6379'
+    networks:
+      - app_network
 
 volumes:
   mongo_data:
+
+networks:
+  app_network:
+    driver: bridge
